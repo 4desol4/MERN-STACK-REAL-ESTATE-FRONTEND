@@ -1,5 +1,6 @@
 import React from "react";
 import { HiLocationMarker } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const SearchBar = ({ filter, setFilter }) => {
   return (
@@ -11,7 +12,10 @@ const SearchBar = ({ filter, setFilter }) => {
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       />
-      <button className="button">Search</button>
+      <Link to="/properties">
+       <button className="button">Search</button>
+      </Link>
+     
     </div>
   );
 };
