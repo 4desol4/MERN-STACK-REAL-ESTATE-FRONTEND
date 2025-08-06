@@ -7,10 +7,10 @@ import { Auth0Provider } from "@auth0/auth0-react";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Auth0Provider
-      domain="dev-apqlhyeqcv5uos4y.us.auth0.com"
-      clientId="AlcxaioE6xzvdhLf6aESPyi0baDWVeeE"
+      domain="dev-eqf4gq8o2bmdznfe.us.auth0.com"
+      clientId="3I249xLSHrMQtzOyWFnlmcL0ffTcMI27"
       authorizationParams={{
-        redirect_uri: "http://localhost:5173/",
+        redirect_uri: "https://mern-stack-real-estate-frontend.vercel.app/",
         audience: "http://localhost:8000",
         scope: "openid profile email",
       }}

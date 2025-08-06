@@ -4,8 +4,7 @@ import { toast } from "react-toastify";
 
 export const api = axios.create({
   baseURL:
-    "http://localhost:8000/api" ||
-    "https://mern-stack-real-estate-backend-jd8w.onrender.com/api",
+    "https://mern-stack-real-estate-backend-jd8w.onrender.com/api" ||"http://localhost:8000/api" ,
 });
 
 export const getAllProperties = async () => {

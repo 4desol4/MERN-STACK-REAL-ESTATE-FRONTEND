@@ -360,7 +360,7 @@
   }
 
   .search-bar {
-    max-width: 350px;
+    max-width: 330px;
   }
 
   .search-bar:hover::before {
