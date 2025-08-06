@@ -21,23 +21,21 @@ const AddLocation = ({ propertyDetails, setPropertyDetails, nextStep }) => {
     },
   });
 
-
   const { country, city, address } = form.values;
 
-
-  const handleSubmit = ()=> {
-    const {hasErrors} = form.validate();
-    if(!hasErrors) {
-        setPropertyDetails((prev)=> ({...prev, city, address, country}))
-        nextStep()
+  const handleSubmit = () => {
+    const { hasErrors } = form.validate();
+    if (!hasErrors) {
+      setPropertyDetails((prev) => ({ ...prev, city, address, country }));
+      nextStep();
     }
-  }
+  };
   return (
     <form
-    onSubmit={(e)=>{
+      onSubmit={(e) => {
         e.preventDefault();
-        handleSubmit()
-    }}
+        handleSubmit();
+      }}
     >
       <div
         className="flexCenter"

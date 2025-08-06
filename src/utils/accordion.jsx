@@ -1,23 +1,25 @@
 import { HiShieldCheck } from "react-icons/hi";
 import { MdCancel, MdAnalytics } from "react-icons/md";
+
 const data = [
   {
-    icon: <HiShieldCheck/>,
-    heading: "Best interest rates on the market",
+    icon: <HiShieldCheck />,
+    heading: "Competitive Interest Rates",
     detail:
-      "Exercitation in fugiat est ut ad ea cupidatat ut in cupidatat occaecat ut occaecat consequat est minim minim esse tempor laborum consequat esse adipisicing eu reprehenderit enim.",
+      "We offer some of the most competitive mortgage interest rates on the market, helping you save more over time while making your dream property affordable.",
   },
   {
     icon: <MdCancel />,
-    heading: "Prevent unstable prices",
+    heading: "Price Stability & Transparency",
     detail:
-      "Exercitation in fugiat est ut ad ea cupidatat ut in cupidatat occaecat ut occaecat consequat est minim minim esse tempor laborum consequat esse adipisicing eu reprehenderit enim.",
+      "Our pricing model is designed to prevent unexpected fluctuations. You get full transparency with no hidden costs, ensuring peace of mind during your property investment journey.",
   },
   {
     icon: <MdAnalytics />,
-    heading: "Best price on the market",
+    heading: "Accurate Market Valuation",
     detail:
-      "Exercitation in fugiat est ut ad ea cupidatat ut in cupidatat occaecat ut occaecat consequat est minim minim esse tempor laborum consequat esse adipisicing eu reprehenderit enim.",
+      "Through advanced analytics and local market expertise, we ensure every property is fairly and accurately priced, so you always get the best value for your investment.",
   },
 ];
+
 export default data;

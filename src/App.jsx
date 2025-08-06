@@ -12,7 +12,7 @@ import Property from "./pages/Property/Property";
 import UserDetailContext from "./context/UserDetailContext";
 
 import Favourites from "./pages/Favourites/Favourites";
-
+import AboutUs from "./pages/AboutUs/AboutUs";
 function App() {
   const queryClient = new QueryClient();
 
@@ -31,9 +31,13 @@ function App() {
                 <Route path="/" element={<Website />} />
                 <Route path="/properties">
                   <Route index element={<Properties />} />
-                  <Route path=":propertyId" element={<Property />} />
+                  <Route
+                    path="/properties/:propertyId"
+                    element={<Property />}
+                  />
                 </Route>
                 <Route path="/favourites" element={<Favourites />} />
+                <Route path="/aboutUs" element={<AboutUs />} />
               </Route>
             </Routes>
           </Suspense>

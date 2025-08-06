@@ -18,12 +18,14 @@ const AddPropertyModal = ({ opened, setOpened }) => {
     city: "",
     address: "",
     image: null,
+    images: [],
+    forStatus: "rent", // New field
     facilities: {
       bedrooms: 0,
       parkings: 0,
       bathrooms: 0,
+      squareFeet: 0, // New field
     },
-    userEmail: user?.email,
   });
 
   const nextStep = () => {
@@ -55,7 +57,8 @@ const AddPropertyModal = ({ opened, setOpened }) => {
               setPropertyDetails={setPropertyDetails}
             />
           </Stepper.Step>
-          <Stepper.Step label="Images" description="Upload ">
+
+          <Stepper.Step label="Images" description="Upload">
             <UploadImage
               prevStep={prevStep}
               nextStep={nextStep}
@@ -63,6 +66,7 @@ const AddPropertyModal = ({ opened, setOpened }) => {
               setPropertyDetails={setPropertyDetails}
             />
           </Stepper.Step>
+
           <Stepper.Step label="Basics" description="Details">
             <BasicDetails
               prevStep={prevStep}
@@ -72,7 +76,7 @@ const AddPropertyModal = ({ opened, setOpened }) => {
             />
           </Stepper.Step>
 
-          <Stepper.Step>
+          <Stepper.Step label="Facilities" description="Specs">
             <Facilities
               prevStep={prevStep}
               propertyDetails={propertyDetails}
@@ -81,6 +85,7 @@ const AddPropertyModal = ({ opened, setOpened }) => {
               setActiveStep={setActive}
             />
           </Stepper.Step>
+
           <Stepper.Completed>
             Completed, click back button to get to previous step
           </Stepper.Completed>

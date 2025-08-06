@@ -1,29 +1,138 @@
 import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
-import { getProperty, removeBooking } from "../../utils/api";
+import { getProperty } from "../../utils/api.js";
 import { PuffLoader } from "react-spinners";
-import { AiFillHeart } from "react-icons/ai";
-import "./Property.css";
-
-import { FaShower } from "react-icons/fa";
-import { AiTwotoneCar } from "react-icons/ai";
-import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
+import { FaShower, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { MdLocationPin, MdMeetingRoom, MdStraighten } from "react-icons/md";
+import { HiSparkles } from "react-icons/hi";
 import Map from "../../components/Map/Map";
 import useAuthCheck from "../../hooks/useAuthCheck";
 import { useAuth0 } from "@auth0/auth0-react";
-import UserDetailContext from "../../context/UserDetailContext.js";
-import { Button } from "@mantine/core";
+import UserDetailContext from "../../context/UserDetailContext";
 import { toast } from "react-toastify";
 import Heart from "../../components/Heart/Heart";
+import { useParams } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Thumbs, EffectFade } from "swiper/modules";
+import { motion, AnimatePresence } from "framer-motion";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/thumbs";
+import "swiper/css/effect-fade";
+import "./Property.css";
+// Enhanced Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const fadeInUp = {
+  hidden: {
+    opacity: 0,
+    y: 60,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
+
+const slideInLeft = {
+  hidden: {
+    opacity: 0,
+    x: -50,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+const slideInRight = {
+  hidden: {
+    opacity: 0,
+    x: 50,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+const scaleIn = {
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "backOut",
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const staggerItem = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
 const Property = () => {
-  const { pathname } = useLocation();
-  const id = pathname.split("/").slice(-1)[0];
-  const { data, isLoading, isError } = useQuery(["resd", id], () =>
-    getProperty(id)
+  const { propertyId } = useParams();
+
+  const { data, isLoading, isError } = useQuery(
+    ["property", propertyId],
+    () => getProperty(propertyId),
+    {
+      enabled: !!propertyId,
+    }
   );
 
-  const [modalOpened, setModalOpened] = useState(false);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const { validateLogin } = useAuthCheck();
   const { user } = useAuth0();
 
@@ -32,111 +141,380 @@ const Property = () => {
     setUserDetails,
   } = useContext(UserDetailContext);
 
-  const { mutate: cancelBooking, isLoading: cancelling } = useMutation({
-    mutationFn: () => removeBooking(id, user?.email, token),
-    onSuccess: () => {
-      setUserDetails((prev) => ({
-        ...prev,
-        bookings: prev.bookings.filter((booking) => booking?.id !== id),
-      }));
-
-      toast.success("Booking cancelled", { position: "bottom-right" });
-    },
-  });
-
   if (isLoading) {
     return (
-      <div className="wrapper">
-        <div className="flexCenter paddings">
-          <PuffLoader />
-        </div>
+      <div className="loading-container">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="loading-content"
+        >
+          <PuffLoader color="#ff6600" size={60} />
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="loading-text"
+          >
+            Loading property details...
+          </motion.p>
+        </motion.div>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="wrapper">
-        <div className="flexCenter paddings">
-          <span>Error while fetching the property details</span>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="error-container"
+      >
+        <div className="error-content">
+          <span className="error-text">
+            Error while fetching the property details
+          </span>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
+  const {
+    image,
+    images,
+    price,
+    title,
+    description,
+    address,
+    city,
+    country,
+    userEmail,
+    facilities,
+    forStatus,
+  } = data;
+
   return (
-    <div className="wrapper">
-      <div className="flexColStart paddings innerWidth property-container">
-        {/* like button */}
-        <div className="like">
-          <Heart id={id} />
-        </div>
+    <motion.div
+      className="property-wrapper"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <div className="property-container">
+        {/* Enhanced Heart with Floating Animation */}
+        <motion.div
+          className="property-heart-container"
+          variants={scaleIn}
+          whileHover={{
+            scale: 1.1,
+            rotate: [0, -10, 10, 0],
+            transition: { duration: 0.3 },
+          }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Heart id={propertyId} />
+          <motion.div
+            className="property-heart-glow"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </motion.div>
 
-        {/* image */}
-        <img src={data?.image} alt="home image" />
+        {/* Enhanced Image Gallery */}
+        <motion.div className="gallery-container" variants={fadeInUp}>
+          <AnimatePresence mode="wait">
+            {images?.length > 1 ? (
+              <motion.div
+                key="gallery"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Swiper
+                  modules={[Navigation, Pagination, Thumbs, EffectFade]}
+                  spaceBetween={10}
+                  navigation
+                  pagination={{
+                    type: "fraction",
+                    formatFractionCurrent: (number) => `0${number}`.slice(-2),
+                    formatFractionTotal: (number) => `0${number}`.slice(-2),
+                  }}
+                  thumbs={{ swiper: thumbsSwiper }}
+                  effect="fade"
+                  fadeEffect={{ crossFade: true }}
+                  className="main-gallery"
+                  onSlideChange={() => {
+                    // Trigger a subtle animation on slide change
+                  }}
+                >
+                  {data.images.map((imgUrl, i) => (
+                    <SwiperSlide key={i}>
+                      <motion.div
+                        className="property-image-container"
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        <img
+                          src={imgUrl}
+                          alt={`Property view ${i + 1}`}
+                          onLoad={() => setImageLoaded(true)}
+                        />
+                        <div className="property-image-overlay" />
+                      </motion.div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
 
-        <div className="flexCenter property-details">
-          {/* left */}
-          <div className="flexColStart left">
-            {/* head */}
-            <div className="flexStart head">
-              <span className="primaryText">{data?.title}</span>
-              <span className="orangeText" style={{ fontSize: "1.5rem" }}>
-                $ {data?.price}
-              </span>
-            </div>
+                <motion.div
+                  className="thumbnail-container"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <Swiper
+                    modules={[Thumbs]}
+                    onSwiper={setThumbsSwiper}
+                    spaceBetween={10}
+                    slidesPerView="auto"
+                    watchSlidesProgress
+                    className="thumbnail-swiper"
+                  >
+                    {data.images.map((imgUrl, i) => (
+                      <SwiperSlide key={i}>
+                        <motion.div
+                          className="thumbnail-slide"
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <img src={imgUrl} alt={`Thumbnail ${i + 1}`} />
+                        </motion.div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </motion.div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="single"
+                className="single-image-container"
+                variants={fadeInUp}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.4 }}
+              >
+                <img src={data.image} alt="Property" className="single-image" />
+                <div className="image-overlay" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
-            {/* facilities */}
-            <div className="flexStart facilities">
-              {/* bathrooms */}
-              <div className="flexStart facility">
-                <FaShower size={20} color="#1F3E72" />
-                <span>{data?.facilities?.bathrooms} Bathrooms</span>
+        {/* Enhanced Property Details */}
+        <motion.div className="property-details" variants={staggerContainer}>
+          <motion.div className="property-info" variants={slideInLeft}>
+            {/* Header Section */}
+            <motion.div className="property-header" variants={staggerItem}>
+              <motion.div
+                className="title-section"
+                whileHover={{ x: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <h1 className="property-title">{data.title}</h1>
+                <motion.div
+                  className="title-decoration"
+                  initial={{ width: 0 }}
+                  animate={{ width: "60px" }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                />
+              </motion.div>
+
+              <motion.div
+                className="price-section"
+                variants={scaleIn}
+                whileHover={{ scale: 1.05 }}
+              >
+                <span className="price-label">Price</span>
+                <span className="price-value">
+                  {data.price !== undefined
+                    ? `$${price.toLocaleString()}`
+                    : "Loading..."}
+                </span>
+                <motion.div
+                  className="price-sparkle"
+                  animate={{
+                    rotate: [0, 360],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <HiSparkles />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+
+            {/* Status Badge */}
+            <motion.div
+              className="status-container"
+              variants={staggerItem}
+              whileHover={{ scale: 1.05 }}
+            >
+              <motion.span
+                className={`status-badge ${
+                  data.forStatus?.toLowerCase() === "rent" ? "rent" : "sale"
+                }`}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                FOR {data.forStatus?.toUpperCase()}
+              </motion.span>
+            </motion.div>
+
+            {/* Facilities */}
+            <motion.div
+              className="facilities-container"
+              variants={staggerContainer}
+            >
+              <h3 className="section-title">Features</h3>
+              <div className="facilities-grid">
+                {[
+                  {
+                    icon: FaShower,
+                    value: data.facilities?.bathrooms,
+                    label: "Bathrooms",
+                    color: "#3b82f6",
+                  },
+                  {
+                    icon: MdMeetingRoom,
+                    value: data.facilities?.bedrooms,
+                    label: "Bedrooms",
+                    color: "#10b981",
+                  },
+                  {
+                    icon: MdStraighten,
+                    value: data.facilities?.squareFeet,
+                    label: "sq ft",
+                    color: "#f59e0b",
+                  },
+                ].map((facility, index) => (
+                  <motion.div
+                    key={index}
+                    className="facility-card"
+                    variants={staggerItem}
+                    whileHover={{
+                      y: -5,
+                      scale: 1.05,
+                      boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div
+                      className="facility-icon"
+                      style={{ backgroundColor: `${facility.color}15` }}
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <facility.icon size={24} color={facility.color} />
+                    </motion.div>
+                    <div className="facility-info">
+                      <span className="facility-value">{facility.value}</span>
+                      <span className="facility-label">{facility.label}</span>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
+            </motion.div>
 
-              {/* parkings */}
-              <div className="flexStart facility">
-                <AiTwotoneCar size={20} color="#1F3E72" />
-                <span>{data?.facilities.parkings} Parking</span>
+            {/* Description */}
+            <motion.div
+              className="description-container"
+              variants={staggerItem}
+            >
+              <h3 className="section-title">Description</h3>
+              <motion.p
+                className="description-text"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                {data.description}
+              </motion.p>
+            </motion.div>
+
+            {/* Location */}
+            <motion.div
+              className="location-container"
+              variants={staggerItem}
+              whileHover={{ x: 5 }}
+            >
+              <div className="location-info">
+                <FaMapMarkerAlt size={20} color="#ef4444" />
+                <span className="location-text">
+                  {data.address}, {data.city}, {data.country}
+                </span>
               </div>
+            </motion.div>
 
-              {/* rooms */}
-              <div className="flexStart facility">
-                <MdMeetingRoom size={20} color="#1F3E72" />
-                <span>{data?.facilities.bedrooms} Room/s</span>
-              </div>
-            </div>
+            {/* Contact Button */}
+            <motion.div className="contact-container" variants={staggerItem}>
+              <motion.a
+                href={`mailto:${userEmail}`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <motion.button
+                  className="contact-button"
+                  whileHover={{
+                    boxShadow: "0 10px 30px rgba(255, 102, 0, 0.3)",
+                    y: -2,
+                  }}
+                >
+                  <FaEnvelope />
+                  <span>Contact Agent</span>
+                  <motion.div
+                    className="button-ripple"
+                    initial={{ scale: 0, opacity: 0.5 }}
+                    whileHover={{
+                      scale: 1,
+                      opacity: 0,
+                      transition: { duration: 0.6 },
+                    }}
+                  />
+                </motion.button>
+              </motion.a>
+            </motion.div>
+          </motion.div>
 
-            {/* description */}
-
-            <span className="secondaryText" style={{ textAlign: "justify" }}>
-              {data?.description}
-            </span>
-
-            {/* address */}
-
-            <div className="flexStart" style={{ gap: "1rem" }}>
-              <MdLocationPin size={25} />
-              <span className="secondaryText">
-                {data?.address} {data?.city} {data?.country}
-              </span>
-            </div>
-            <a href={`mailto:${data?.userEmail}`} >
-              <button className="button" >Email Agent</button>
-            </a>
-          </div>
-
-          {/* right side */}
-          <div className="map">
-            <Map
-              address={data?.address}
-              city={data?.city}
-              country={data?.country}
-            />
-          </div>
-        </div>
+          {/* Map Section */}
+          <motion.div className="map-container" variants={slideInRight}>
+            <motion.div
+              className="map-wrapper"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Map
+                address={data.address}
+                city={data.city}
+                country={data.country}
+              />
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

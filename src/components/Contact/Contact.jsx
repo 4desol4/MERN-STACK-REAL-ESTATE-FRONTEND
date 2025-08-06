@@ -1,24 +1,41 @@
 import React from "react";
-import "./Contact.css";
 import { MdCall } from "react-icons/md";
 import { BsFillChatDotsFill } from "react-icons/bs";
-import {HiChatBubbleBottomCenter} from 'react-icons/hi2'
+import { HiChatBubbleBottomCenter } from "react-icons/hi2";
+import { motion } from "framer-motion";
+import "./Contact.css";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 },
+};
+
 const Contact = () => {
   return (
     <div id="contact-us" className="c-wrapper">
       <div className="paddings innerWidth flexCenter c-container">
-        {/* left side */}
-        <div className="flexColStart c-left">
-          <span className="orangeText">Our Contact Us</span>
-          <span className="primaryText">Easy to contact us</span>
-          <span className="secondaryText">
-            We always ready to help by providijng the best services for you. We
-            beleive a good blace to live can make your life better{" "}
-          </span>
+        {/* Left side */}
+        <motion.div
+          className="flexColStart c-left"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ staggerChildren: 0.2 }}
+        >
+          <motion.span variants={fadeInUp} className="orangeText">
+            Contact Us
+          </motion.span>
+          <motion.span variants={fadeInUp} className="primaryText">
+            Easy to Reach Us
+          </motion.span>
+          <motion.span variants={fadeInUp} className="secondaryText">
+            We’re always ready to assist with top-notch service. A good place to
+            live improves your life.
+          </motion.span>
 
           <div className="flexColStart contactModes">
-            {/* first row */}
-            <div className="flexStart row">
+            {/* Chat */}
+            <motion.div variants={fadeInUp} className="row">
               <div className="flexColCenter mode">
                 <div className="flexStart">
                   <div className="flexCenter icon">
@@ -30,13 +47,13 @@ const Contact = () => {
                   </div>
                 </div>
                 <a href="https://services.zangi.com/dl/conversation/1032137431">
-                <div className="flexCenter button">Chat now</div>
+                  <div className="flexCenter button">Chat now</div>
                 </a>
               </div>
-            </div>
+            </motion.div>
 
-            {/* second row */}
-            <div className="flexStart row"> 
+            {/* Email */}
+            <motion.div variants={fadeInUp} className="row">
               <div className="flexColCenter mode">
                 <div className="flexStart">
                   <div className="flexCenter icon">
@@ -48,19 +65,24 @@ const Contact = () => {
                   </div>
                 </div>
                 <a href="mailto:presidiorealestate9@gmail.com">
-                <div className="flexCenter button">Email now</div>
+                  <div className="flexCenter button">Email now</div>
                 </a>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* right side */}
-        <div className="flexEnd c-right">
+        {/* Right side */}
+        <motion.div
+          className="flexEnd c-right"
+          initial={{ scale: 0.8, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <div className="image-container">
-            <img src="./contact.jpg" alt="" />
+            <img src="./contact.jpg" alt="contact" />
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

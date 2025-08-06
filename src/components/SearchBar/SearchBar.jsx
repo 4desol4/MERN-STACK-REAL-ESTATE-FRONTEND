@@ -13,9 +13,8 @@ const SearchBar = ({ filter, setFilter }) => {
         onChange={(e) => setFilter(e.target.value)}
       />
       <Link to="/properties">
-       <button className="button">Search</button>
+        <button className="button">Search</button>
       </Link>
-     
     </div>
   );
 };

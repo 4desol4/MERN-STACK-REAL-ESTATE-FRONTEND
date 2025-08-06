@@ -4,9 +4,17 @@ import "./Properties.css";
 import useProperties from "../../hooks/useProperties";
 import { PuffLoader } from "react-spinners";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
+
 const Properties = () => {
   const { data, isError, isLoading } = useProperties();
   const [filter, setFilter] = useState("");
+
   if (isError) {
     return (
       <div className="wrapper">
@@ -18,36 +26,39 @@ const Properties = () => {
   if (isLoading) {
     return (
       <div className="wrapper flexCenter" style={{ height: "60vh" }}>
-        <PuffLoader
-          height="80"
-          width="80"
-          radius={1}
-          color="#4066ff"
-          aria-label="puff-loading"
-        />
+        <PuffLoader color="#4066ff" />
       </div>
     );
   }
+
+  const filteredData = data.filter(
+    (property) =>
+      property.title.toLowerCase().includes(filter.toLowerCase()) ||
+      property.city.toLowerCase().includes(filter.toLowerCase()) ||
+      property.country.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <div className="wrapper">
       <div className="flexColCenter paddings innerWidth properties-container">
         <SearchBar filter={filter} setFilter={setFilter} />
 
         <div className="paddings flexCenter properties">
-          {
-            // data.map((card, i)=> (<PropertyCard card={card} key={i}/>))
-
-            data
-              .filter(
-                (property) =>
-                  property.title.toLowerCase().includes(filter.toLowerCase()) ||
-                  property.city.toLowerCase().includes(filter.toLowerCase()) ||
-                  property.country.toLowerCase().includes(filter.toLowerCase())
-              )
-              .map((card, i) => (
-                <PropertyCard card={card} key={i} />
-              ))
-          }
+          {filteredData.length > 0 ? (
+            filteredData.map((card, i) => (
+              <motion.div
+                key={i}
+                variants={fadeInUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <PropertyCard card={card} />
+              </motion.div>
+            ))
+          ) : (
+            <span>No properties match your search.</span>
+          )}
         </div>
       </div>
     </div>
