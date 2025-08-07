@@ -124,11 +124,6 @@
     gap: 3rem;
     padding: 2rem 0;
   }
-
-  .properties-container .search-bar {
-    width: min(600px, 40vw);
-    padding: 1rem;
-  }
 }
 
 @media (min-width: 1920px) {
