@@ -7,16 +7,23 @@
   border-radius: 30px;
   border: 1px solid rgba(120, 120, 120, 0.374);
   flex-wrap: nowrap;
+  padding: 8px 12px; 
+  display: flex;
+  align-items: center;
 }
 
 .properties-container .search-bar .button {
   border-radius: 30px;
   font-size: 12px;
-  padding: 10px 15px;
+  padding: 6px 12px; 
 }
 
 .properties-container .search-bar input {
   width: 70%;
+  padding: 4px 8px; 
+  border: none;
+  outline: none;
+  background: transparent;
 }
 
 .properties {
