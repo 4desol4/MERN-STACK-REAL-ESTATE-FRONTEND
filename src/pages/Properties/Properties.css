@@ -55,13 +55,9 @@
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
   }
-
-  .properties-container .search-bar {
-    width: clamp(300px, 85vw, 500px);
-  }
 }
 
-/* Mobile Landscape */
+
 @media (max-width: 768px) and (orientation: landscape) {
   .properties-container {
     padding: 1rem;
@@ -72,13 +68,10 @@
     gap: 1.5rem;
   }
 
-  .properties-container .search-bar {
-    width: clamp(280px, 80vw, 450px);
-    padding: 0.5rem;
-  }
+  
 }
 
-/* Mobile Portrait */
+
 @media (max-width: 768px) {
   .properties-container {
     padding: clamp(0.5rem, 2vw, 1rem);
@@ -89,16 +82,6 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
     padding: 1rem 0;
-  }
-
-  .properties-container .search-bar {
-    width: clamp(280px, 95vw, 400px);
-    margin-bottom: 1.5rem;
-  }
-
-  .properties-container .search-bar::before {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
   }
 }
 
@@ -111,31 +94,6 @@
   .properties {
     gap: 1.25rem;
     padding: 0.5rem 0;
-  }
-
-  .properties-container .search-bar {
-    width: clamp(260px, 98vw, 350px);
-    min-width: 260px;
-    padding: clamp(0.4rem, 1.2vw, 0.6rem);
-    gap: clamp(0.3rem, 1vw, 0.5rem);
-  }
-
-  .properties-container .search-bar::before {
-    font-size: 14px;
-    margin-left: 0.4rem;
-    margin-right: 0.3rem;
-  }
-
-  .properties-container .search-bar input {
-    font-size: clamp(0.85rem, 2.2vw, 1rem);
-    padding: 0.5rem 0;
-  }
-
-  .properties-container .search-bar .button {
-    min-width: 60px;
-    padding: clamp(0.5rem, 1.5vw, 0.7rem) clamp(0.8rem, 2vw, 1rem);
-    font-size: clamp(0.75rem, 1.8vw, 0.85rem);
-    border-radius: 18px;
   }
 
   .no-results {
@@ -152,18 +110,6 @@
 
   .properties {
     gap: 1rem;
-  }
-
-  .properties-container .search-bar {
-    width: calc(100vw - 1rem);
-    min-width: 240px;
-    max-width: 300px;
-  }
-
-  .properties-container .search-bar .button {
-    min-width: 55px;
-    padding: 0.45rem 0.7rem;
-    font-size: 0.7rem;
   }
 }
 @media (min-width: 1440px) {
@@ -270,19 +216,6 @@
 
 
 @media (prefers-color-scheme: dark) {
-  .properties-container .search-bar {
-    background: rgba(45, 55, 72, 0.9);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .properties-container .search-bar input {
-    color: #e2e8f0;
-  }
-
-  .properties-container .search-bar input::placeholder {
-    color: #a0aec0;
-  }
-
   .no-results {
     background: rgba(45, 55, 72, 0.3);
     color: #e2e8f0;
