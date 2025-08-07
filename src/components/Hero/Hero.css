@@ -70,7 +70,7 @@
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.search-bar {
+.hero-left .search-bar {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -92,7 +92,7 @@
   overflow: hidden;
 }
 
-.search-bar:hover {
+.hero-left .search-bar:hover {
   transform: translateY(-2px);
   box-shadow: 
     0 15px 50px rgba(0, 0, 0, 0.15),
@@ -101,7 +101,7 @@
   border-color: rgba(255, 107, 53, 0.3);
 }
 
-.search-bar::before {
+.hero-left .search-bar::before {
   content: '';
   position: absolute;
   top: 0;
@@ -114,7 +114,7 @@
   border-radius: inherit;
 }
 
-.search-bar:hover::before {
+.hero-left .search-bar:hover::before {
   opacity: 1;
 }
 
@@ -132,7 +132,7 @@
   position: relative;
 }
 
-.search-icon::after {
+.hero-left .search-icon::after {
   content: '📍';
   font-size: clamp(10px, 2.5vw, 14px);
   filter: brightness(0) invert(1);
@@ -152,13 +152,13 @@
   min-width: 0;
 }
 
-.search-bar > input::placeholder {
+.hero-left .search-bar > input::placeholder {
   color: #95a5a6;
   font-size: clamp(0.8rem, 2.2vw, 1rem);
   font-weight: 400;
 }
 
-.search-bar > button {
+.hero-left .search-bar > button {
   padding: clamp(0.5rem, 1.8vw, 0.75rem) clamp(1rem, 2.5vw, 1.5rem);
   font-size: clamp(0.75rem, 2vw, 0.9rem);
   font-weight: 600;
@@ -179,7 +179,7 @@
   flex-shrink: 0;
 }
 
-.search-bar > button:hover {
+.hero-left .search-bar > button:hover {
   transform: translateY(-1px) scale(1.02);
   box-shadow: 
     0 6px 20px rgba(255, 107, 53, 0.35),
@@ -187,7 +187,7 @@
   background: linear-gradient(135deg, #ff5722, #e68900);
 }
 
-.search-bar > button:active {
+.hero-left .search-bar > button:active {
   transform: translateY(0px) scale(0.98);
 }
 
@@ -317,7 +317,7 @@
     right: 60px;
   }
 
-  .search-bar {
+  .hero-left .search-bar {
     max-width: 600px;
   }
 
@@ -374,7 +374,7 @@
     min-width: 100px;
     padding: 1rem 0.5rem;
   }
-   .search-bar {
+.hero-left .search-bar {
     max-width: 95%;
     margin: 0 auto;
     padding: clamp(0.4rem, 1.2vw, 0.6rem);
@@ -401,7 +401,7 @@
     padding: 0 0.5rem;
   }
 
-  .search-bar {
+  .hero-left .search-bar {
     margin: 0 1rem;
     max-width: calc(100% - 2rem);
     padding: clamp(0.35rem, 1vw, 0.5rem);
@@ -409,17 +409,17 @@
     gap: clamp(0.3rem, 1vw, 0.5rem);
   }
   
-  .search-icon {
+  .hero-left .search-icon {
     width: clamp(16px, 3.5vw, 20px);
     height: clamp(16px, 3.5vw, 20px);
     margin-left: clamp(0.2rem, 0.8vw, 0.4rem);
   }
   
-  .search-icon::after {
+  .hero-left .search-icon::after {
     font-size: clamp(8px, 2vw, 12px);
   }
   
-  .search-bar > button {
+  .hero-left .search-bar > button {
     min-width: clamp(60px, 12vw, 75px);
     padding: clamp(0.4rem, 1.2vw, 0.6rem) clamp(0.8rem, 1.8vw, 1rem);
     font-size: clamp(0.7rem, 1.8vw, 0.8rem);
@@ -456,7 +456,7 @@
     max-width: 700px;
   }
 
-  .search-bar {
+  .hero-left .search-bar {
     max-width: 550px;
   }
 
@@ -487,15 +487,15 @@
     animation: none;
   }
 
-  .search-bar {
+  .hero-left .search-bar {
     transition: none;
   }
 
-  .search-bar:hover {
+  .hero-left .search-bar:hover {
     transform: none;
   }
 
-  .search-bar::before {
+  .hero-left .search-bar::before {
     display: none;
   }
 }
